@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APLIKASI PRESENSI MURID BARCODE - EKONOMI </title>
+    <title>Aplikasi Presensi Siswa - Rapid Barcode & Dashboard</title>
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -249,6 +249,15 @@
             </div>
 
             <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+                <!-- Jam Digital Real-Time Lengkap dengan Hari & Tanggal -->
+                <div class="flex items-center gap-2 bg-slate-900 text-white px-3 py-1.5 rounded-xl shadow-xs border border-slate-700/80 select-none">
+                    <i class="far fa-clock text-blue-400 text-xs sm:text-sm animate-pulse"></i>
+                    <div class="leading-tight">
+                        <div id="liveDigitalClock" class="font-mono text-xs sm:text-sm font-extrabold tracking-wider text-emerald-400">00:00:00</div>
+                        <div id="liveDigitalDate" class="text-[10px] sm:text-[11px] text-slate-300 font-medium whitespace-nowrap">Memuat tanggal...</div>
+                    </div>
+                </div>
+
                 <!-- Pemilih Kelas Aktif -->
                 <div class="flex items-center gap-1.5 bg-blue-50 border border-blue-200 rounded-xl px-3 py-2">
                     <i class="fas fa-chalkboard text-blue-600 text-xs"></i>
@@ -1637,6 +1646,8 @@
             headerTeacherPhoto: document.getElementById('headerTeacherPhoto'),
             pageTitle: document.getElementById('pageTitle'),
             headerSubtitle: document.getElementById('headerSubtitle'),
+            liveDigitalClock: document.getElementById('liveDigitalClock'),
+            liveDigitalDate: document.getElementById('liveDigitalDate'),
             classFilterSelect: document.getElementById('classFilterSelect'),
             networkStatus: document.getElementById('networkStatus'),
             syncStatus: document.getElementById('syncStatus'),
@@ -4277,6 +4288,22 @@
         });
 
         // --- 20. INISIALISASI APLIKASI ---
+        function updateLiveClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            if (ui.liveDigitalClock) {
+                ui.liveDigitalClock.textContent = `${hours}:${minutes}:${seconds} WIB`;
+            }
+            if (ui.liveDigitalDate) {
+                ui.liveDigitalDate.textContent = formatDateId(now);
+            }
+        }
+
+        updateLiveClock();
+        setInterval(updateLiveClock, 1000);
+
         loadLocalCache();
         populateClassSelects();
         updateNetworkStatus();
